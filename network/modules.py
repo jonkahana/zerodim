@@ -151,7 +151,7 @@ class BetaVAEEncoder(nn.Module):
 
 	def forward(self, img):
 		h = self.convs(img)
-		h = h.view((-1, 64*4*4))
+		h = h.reshape((-1, 64*4*4))
 
 		return self.fc(h)
 
