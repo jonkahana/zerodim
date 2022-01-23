@@ -7,7 +7,7 @@ from torch.nn import functional as F
 from torchvision import models
 
 # stylegan2 modules
-from model import ConstantInput, ToRGB, ModulatedConv2d, FusedLeakyReLU
+from stylegan2.model import ConstantInput, ToRGB, ModulatedConv2d, FusedLeakyReLU
 
 
 class StyleGenerator(nn.Module):

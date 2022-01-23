@@ -20,7 +20,7 @@ from network.modules import StyleGenerator, ConvEncoder, ResidualEncoder, VGGDis
 from network.utils import ImageTensorDataset
 
 from evaluation import dci, sap, mig, classifier
-from model import Discriminator  # from stylegan2
+from stylegan2.model import Discriminator  # from stylegan2
 
 
 class MultiFactorClassifier(nn.Module):
