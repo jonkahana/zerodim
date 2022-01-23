@@ -27,7 +27,7 @@ from distributed import (
     reduce_sum,
     get_world_size,
 )
-from op import conv2d_gradfix
+from stylegan2.op import conv2d_gradfix
 from non_leaking import augment, AdaptiveAugment
 
 
