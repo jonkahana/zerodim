@@ -328,7 +328,7 @@ class Model:
 			for term, val in losses_supervised.items():
 				summary.add_scalar(tag='loss/supervised/{}'.format(term), scalar_value=val.item(), global_step=epoch)
 
-			if epoch % self.config['train']['n_epochs_between_evals'] == 0 and self.config['gt_labels']:
+			if epoch % self.config['train']['n_epochs_between_evals'] == 0 and self.config['gt_labels'] and epoch != 0:
 				latent_factors = self.__embed_factors(dataset)
 				scores = dci.evaluate(latent_factors, factors)
 
@@ -428,7 +428,7 @@ class Model:
 			for term, loss in losses.items():
 				summary.add_scalar(tag='loss/encoders/{}'.format(term), scalar_value=loss.item(), global_step=epoch)
 
-			if epoch % self.config['amortization']['n_epochs_between_evals'] == 0 and self.config['gt_labels']:
+			if epoch % self.config['amortization']['n_epochs_between_evals'] == 0 and self.config['gt_labels'] and epoch != 0:
 				latent_factors = self.__encode_factors(imgs)
 				scores = dci.evaluate(latent_factors, factors)
 
@@ -544,7 +544,7 @@ class Model:
 			for term, loss in losses_generator.items():
 				summary.add_scalar(tag='loss/generator/{}'.format(term), scalar_value=loss.item(), global_step=epoch)
 
-			if epoch % self.config['synthesis']['n_epochs_between_evals'] == 0 and self.config['gt_labels']:
+			if epoch % self.config['synthesis']['n_epochs_between_evals'] == 0 and self.config['gt_labels'] and epoch != 0:
 				latent_residuals = self.__encode_residuals(imgs)
 				for factor_idx, factor_name in enumerate(self.config['factor_names']):
 					acc_train, acc_test = classifier.logistic_regression(latent_residuals, factors[:, factor_idx])
