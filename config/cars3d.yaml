@@ -4,6 +4,7 @@ loss_reconstruction: mse
 factor_names:
   - elevation
   - azimuth
+  - object
 
 train_size: 17568
 n_labels_per_factor: 1000

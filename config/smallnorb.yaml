@@ -5,6 +5,8 @@ factor_names:
   - elevation
   - azimuth
   - lighting
+  - category
+  - instance
 
 train_size: 48600
 n_labels_per_factor: 1000

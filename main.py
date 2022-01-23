@@ -101,7 +101,7 @@ def manipulate(args):
 
 def main():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-bd', '--base-dir', type=str, default='.')
+	parser.add_argument('-bd', '--base-dir', type=str, default='/cs/labs/yedid/jonkahana/external/zerodim/')
 
 	action_parsers = parser.add_subparsers(dest='action')
 	action_parsers.required = True
