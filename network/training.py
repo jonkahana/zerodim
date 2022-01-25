@@ -302,7 +302,7 @@ class Model:
 				batch_labeled = {name: tensor.to(self.device) for name, tensor in batch_labeled.items()}
 
 				losses_supervised = self.__iterate_latent_model_with_labels(batch_labeled)
-				loss_supervised = torch.tensor(0.)
+				loss_supervised = 0
 				for term, val in losses_supervised.items():
 					loss_supervised += self.config['train']['loss_weights'][term] * val
 
@@ -648,7 +648,7 @@ class Model:
 		loss_reconstruction = self.reconstruction_loss(img_reconstructed, batch['img'])
 
 		loss_entropy = factor_model_out['assignment_entropy'].mean()
-		loss_residual_decay = torch.tensor(0.) # torch.mean(residual_code ** 2, dim=1).mean()
+		loss_residual_decay = torch.tensor(0.).to(self.device) # torch.mean(residual_code ** 2, dim=1).mean()
 
 
 		return {
@@ -681,7 +681,7 @@ class Model:
 					batch['factors'][batch['label_masks'][:, f], f]
 				)
 
-		loss_residual_decay = 0 # torch.mean(residual_code ** 2, dim=1).mean()
+		loss_residual_decay = torch.tensor(0.).to(self.device) # torch.mean(residual_code ** 2, dim=1).mean()
 
 		return {
 			'reconstruction': loss_reconstruction,
