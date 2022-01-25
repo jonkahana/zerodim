@@ -653,7 +653,7 @@ class Model:
 
 		return {
 			'reconstruction': loss_reconstruction,
-			# 'residual_decay': loss_residual_decay,
+			'residual_decay': loss_residual_decay,
 			'entropy': loss_entropy
 		}
 
