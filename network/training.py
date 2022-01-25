@@ -872,7 +872,7 @@ class Model:
 
 			for j in range(factor_embeddings.shape[0]):
 				factor_codes[factor_idx] = factor_embeddings[j]
-				latent_code = factor_codes
+				latent_code = torch.cat(factor_codes, dim=0)
 				converted_img = generator(latent_code.unsqueeze(dim=0))
 				converted_imgs.append(converted_img[0])
 
