@@ -302,7 +302,7 @@ class Model:
 				batch_labeled = {name: tensor.to(self.device) for name, tensor in batch_labeled.items()}
 
 				losses_supervised = self.__iterate_latent_model_with_labels(batch_labeled)
-				loss_supervised = 0
+				loss_supervised = torch.tensor(0.)
 				for term, val in losses_supervised.items():
 					loss_supervised += self.config['train']['loss_weights'][term] * val
 
