@@ -648,7 +648,7 @@ class Model:
 		loss_reconstruction = self.reconstruction_loss(img_reconstructed, batch['img'])
 
 		loss_entropy = factor_model_out['assignment_entropy'].mean()
-		loss_residual_decay = 0 # torch.mean(residual_code ** 2, dim=1).mean()
+		loss_residual_decay = torch.tensor(0.) # torch.mean(residual_code ** 2, dim=1).mean()
 
 
 		return {
