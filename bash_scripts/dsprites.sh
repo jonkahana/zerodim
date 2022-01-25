@@ -5,4 +5,4 @@ module load tensorflow/2.5.0
 export CUDA_HOME="/usr/local/nvidia/cuda/11.0/"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CUDA_HOME/lib64:$CUDA_HOME/extras/CUPTI/lib64"
 
-python -u main.py train --config cars3d --data-name cars3d-x64 --model-name zerodim-cars3d-x64
+python -u main.py train --config dsprites --data-name dsprites-x64 --model-name zerodim-dsprites-x64-no-residual
