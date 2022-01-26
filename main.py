@@ -73,10 +73,10 @@ def train(args):
 		model_dir, tensorboard_dir
 	)
 
-	# model.warmup_amortized_model(
-	# 	imgs[train_idx], factors[train_idx], label_masks, residual_factors[train_idx],
-	# 	model_dir, tensorboard_dir=os.path.join(tensorboard_dir, 'amortization')
-	# )
+	model.warmup_amortized_model(
+		imgs[train_idx], factors[train_idx], label_masks, residual_factors[train_idx],
+		model_dir, tensorboard_dir=os.path.join(tensorboard_dir, 'amortization')
+	)
 
 	model.tune_amortized_model(
 		imgs[train_idx], factors[train_idx], label_masks, residual_factors[train_idx],

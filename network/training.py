@@ -383,16 +383,16 @@ class Model:
 			shuffle=True, pin_memory=True, drop_last=False
 		)
 
-		optimizer = Adam(
-			params=self.amortized_model.residual_encoder.parameters(),
-			lr=self.config['amortization']['learning_rate']['max']
-		)
+		# optimizer = Adam(
+		# 	params=self.amortized_model.residual_encoder.parameters(),
+		# 	lr=self.config['amortization']['learning_rate']['max']
+		# )
 
-		scheduler = CosineAnnealingLR(
-			optimizer,
-			T_max=self.config['amortization']['n_epochs'] * len(data_loader),
-			eta_min=self.config['amortization']['learning_rate']['min']
-		)
+		# scheduler = CosineAnnealingLR(
+		# 	optimizer,
+		# 	T_max=self.config['amortization']['n_epochs'] * len(data_loader),
+		# 	eta_min=self.config['amortization']['learning_rate']['min']
+		# )
 
 		self.latent_model.to(self.device)
 		self.amortized_model.to(self.device)
@@ -404,57 +404,57 @@ class Model:
 			self.latent_model.train()
 			self.amortized_model.train()
 
-			pbar = tqdm(iterable=data_loader)
-			for batch in pbar:
-				batch = {name: tensor.to(self.device) for name, tensor in batch.items()}
+			# pbar = tqdm(iterable=data_loader)
+			# for batch in pbar:
+			# 	batch = {name: tensor.to(self.device) for name, tensor in batch.items()}
+			#
+			# 	losses = self.__iterate_encoders(batch)
+			# 	loss_total = 0
+			# 	for term, loss in losses.items():
+			# 		loss_total += loss
+			#
+			# 	optimizer.zero_grad()
+			# 	loss_total.backward()
+			# 	optimizer.step()
+			# 	scheduler.step()
+			#
+			# 	pbar.set_description_str('[amortization] epoch #{}'.format(epoch))
+			# 	pbar.set_postfix(loss=loss_total.item())
 
-				losses = self.__iterate_encoders(batch)
-				loss_total = 0
-				for term, loss in losses.items():
-					loss_total += loss
+			# pbar.close()
 
-				optimizer.zero_grad()
-				loss_total.backward()
-				optimizer.step()
-				scheduler.step()
-
-				pbar.set_description_str('[amortization] epoch #{}'.format(epoch))
-				pbar.set_postfix(loss=loss_total.item())
-
-			pbar.close()
-
-			summary.add_scalar(tag='loss/encoders', scalar_value=loss_total.item(), global_step=epoch)
-
-			for term, loss in losses.items():
-				summary.add_scalar(tag='loss/encoders/{}'.format(term), scalar_value=loss.item(), global_step=epoch)
-
-			if epoch % self.config['amortization']['n_epochs_between_evals'] == 0 and self.config['gt_labels'] and epoch != 0:
-				latent_factors = self.__encode_factors(imgs)
-				scores = dci.evaluate(latent_factors, factors)
-
-				summary.add_scalar(tag='dci/informativeness', scalar_value=scores['informativeness_test'], global_step=epoch)
-				summary.add_scalar(tag='dci/disentanglement', scalar_value=scores['disentanglement'], global_step=epoch)
-				summary.add_scalar(tag='dci/completeness', scalar_value=scores['completeness'], global_step=epoch)
-
-				latent_residuals = self.__encode_residuals(imgs)
-				for factor_idx, factor_name in enumerate(self.config['factor_names']):
-					acc_train, acc_test = classifier.logistic_regression(latent_residuals, factors[:, factor_idx])
-					summary.add_scalar(tag='residual/to-{}'.format(factor_name), scalar_value=acc_test, global_step=epoch)
-
-				for factor_idx, factor_name in enumerate(self.config['residual_factor_names']):
-					acc_train, acc_test = classifier.logistic_regression(latent_residuals, residual_factors[:, factor_idx])
-					summary.add_scalar(tag='residual/to-{}'.format(factor_name), scalar_value=acc_test, global_step=epoch)
-
-			if epoch % self.config['amortization']['n_epochs_between_visualizations'] == 0:
-				figure = self.__visualize_reconstruction(dataset, amortized=True)
-				summary.add_image(tag='reconstruction', img_tensor=figure, global_step=epoch)
-
-				for factor_idx, factor_name in enumerate(self.config['factor_names']):
-					figure_fixed = self.__visualize_translation(dataset, factor_idx, randomized=False, amortized=True)
-					figure_random = self.__visualize_translation(dataset, factor_idx, randomized=True, amortized=True)
-
-					summary.add_image(tag='{}-fixed'.format(factor_name), img_tensor=figure_fixed, global_step=epoch)
-					summary.add_image(tag='{}-random'.format(factor_name), img_tensor=figure_random, global_step=epoch)
+			# summary.add_scalar(tag='loss/encoders', scalar_value=loss_total.item(), global_step=epoch)
+			#
+			# for term, loss in losses.items():
+			# 	summary.add_scalar(tag='loss/encoders/{}'.format(term), scalar_value=loss.item(), global_step=epoch)
+			#
+			# if epoch % self.config['amortization']['n_epochs_between_evals'] == 0 and self.config['gt_labels'] and epoch != 0:
+			# 	latent_factors = self.__encode_factors(imgs)
+			# 	scores = dci.evaluate(latent_factors, factors)
+			#
+			# 	summary.add_scalar(tag='dci/informativeness', scalar_value=scores['informativeness_test'], global_step=epoch)
+			# 	summary.add_scalar(tag='dci/disentanglement', scalar_value=scores['disentanglement'], global_step=epoch)
+			# 	summary.add_scalar(tag='dci/completeness', scalar_value=scores['completeness'], global_step=epoch)
+			#
+			# 	latent_residuals = self.__encode_residuals(imgs)
+			# 	for factor_idx, factor_name in enumerate(self.config['factor_names']):
+			# 		acc_train, acc_test = classifier.logistic_regression(latent_residuals, factors[:, factor_idx])
+			# 		summary.add_scalar(tag='residual/to-{}'.format(factor_name), scalar_value=acc_test, global_step=epoch)
+			#
+			# 	for factor_idx, factor_name in enumerate(self.config['residual_factor_names']):
+			# 		acc_train, acc_test = classifier.logistic_regression(latent_residuals, residual_factors[:, factor_idx])
+			# 		summary.add_scalar(tag='residual/to-{}'.format(factor_name), scalar_value=acc_test, global_step=epoch)
+			#
+			# if epoch % self.config['amortization']['n_epochs_between_visualizations'] == 0:
+			# 	figure = self.__visualize_reconstruction(dataset, amortized=True)
+			# 	summary.add_image(tag='reconstruction', img_tensor=figure, global_step=epoch)
+			#
+			# 	for factor_idx, factor_name in enumerate(self.config['factor_names']):
+			# 		figure_fixed = self.__visualize_translation(dataset, factor_idx, randomized=False, amortized=True)
+			# 		figure_random = self.__visualize_translation(dataset, factor_idx, randomized=True, amortized=True)
+			#
+			# 		summary.add_image(tag='{}-fixed'.format(factor_name), img_tensor=figure_fixed, global_step=epoch)
+			# 		summary.add_image(tag='{}-random'.format(factor_name), img_tensor=figure_random, global_step=epoch)
 
 			self.save(model_dir)
 
